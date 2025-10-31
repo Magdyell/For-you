@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mensagem de Amor 💖</title>
+
+  <!-- Fonte bonita -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #e6f2ff; /* Azul bebê inicial */
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      padding: 50px;
+      margin: 0;
+      transition: background-color 1s ease;
+    }
+
+    h1 {
+      color: #b30000;
+      font-size: 36px;
+      text-shadow: 2px 2px 5px #999;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #004080;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      font-size: 18px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff7fd9;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      background-color: #003d80;
+      transform: scale(0.98);
+    }
+
+    #mensagem {
+      margin-top: 40px;
+      font-size: 28px;
+      font-weight: bold;
+      min-height: 50px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #mensagem.mostrar {
+      opacity: 1;
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 24px; }
+      #mensagem { font-size: 20px; }
+      body { padding: 25px; }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Para a mais bela de todas as mulheres!</h1>
+  <p>Eu amo você de todas as formas possíveis 💖</p>
+
+  <button id="meuBotao">Clique aqui</button>
+
+  <div id="mensagem" aria-live="polite"></div>
+
+  <script>
+    const mensagens = [
+      "EU TE AMOOOO! ❤️",
+      "Você é o meu mundo 🌎",
+      "Seu sorriso ilumina meu dia ☀️",
+      "Cada batida do meu coração é por você 💓",
+      "Te amo mais do que ontem, menos do que amanhã 💞",
+      "Você é meu destino e minha paz 🌹",
+      "Nada é mais lindo que o seu olhar ✨"
+    ];
+
+    const estilos = [
+      { fundo: "#c8a2c8", texto: "#2b0032" }, // lilás
+      { fundo: "#ff4d4d", texto: "#fff" },    // vermelho
+      { fundo: "#800080", texto: "#ffccff" }, // roxo
+      { fundo: "#ff99cc", texto: "#660033" }, // rosa
+      { fundo: "#add8e6", texto: "#003366" }  // azul bebê
+    ];
+
+    let iMsg = 0;
+    let iCor = 0;
+
+    const botao = document.getElementById("meuBotao");
+    const div = document.getElementById("mensagem");
+    const corpo = document.body;
+
+    function mostrarMensagem() {
+      // Atualiza o fundo e a cor do texto
+      corpo.style.backgroundColor = estilos[iCor].fundo;
+      div.style.color = estilos[iCor].texto;
+
+      // Atualiza a mensagem
+      div.textContent = mensagens[iMsg];
+      div.classList.add("mostrar");
+
+      // Mantém a mensagem visível por 2 segundos antes de sumir
+      setTimeout(() => {
+        div.classList.remove("mostrar");
+      }, 3000);
+
+      // Próximos índices
+      iMsg = (iMsg + 1) % mensagens.length;
+      iCor = (iCor + 1) % estilos.length;
+    }
+
+    botao.addEventListener("click", mostrarMensagem);
+  </script>
+</body>
+</html>
