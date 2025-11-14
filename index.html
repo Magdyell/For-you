@@ -27,68 +27,91 @@
     100% { background-position: 0% 50%; }
   }
 
-  h1 {
-    font-size: 38px;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
-    transform: rotateX(10deg);
-  }
+  h1 { font-size: 38px; text-shadow: 2px 2px 10px rgba(0,0,0,0.4); }
+  p  { font-size: 20px; margin-top: -10px; }
 
-  p {
-    font-size: 20px;
-    margin-top: -10px;
-    transform: rotateX(10deg);
-  }
-
-  /* Botão estilizado */
+  /* BOTÃO MENSAGEM */
   button {
     margin: 20px;
     padding: 14px 34px;
     font-size: 20px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #ff4da6;
     color: white;
     cursor: pointer;
     transition: .2s;
-    animation: pulsar 1.7s infinite ease-in-out, brilho 2s infinite alternate;
+    animation: pulsar 1.7s infinite ease-in-out, brilhoBotao 2s infinite alternate;
   }
 
-  button:hover {
-    transform: scale(1.1) rotateZ(-1deg);
-  }
-
-  @keyframes pulsar {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-    100% { transform: scale(1); }
-  }
-
-  @keyframes brilho {
+  @keyframes brilhoBotao {
     0% { box-shadow: 0 0 10px #ff74c8; }
     100% { box-shadow: 0 0 28px #ffffff; }
   }
 
-  /* Balões ORGANIZADOS */
+  @keyframes pulsar {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* BOTÃO MÚSICA */
+  #btnMusica {
+    margin-top: 15px;
+    padding: 10px 22px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    background: #ff7edb;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    animation: pulsar 1.7s infinite ease-in-out, brilhoBotao 2s infinite alternate;
+  }
+  #btnMusica:hover { transform: scale(1.08); }
+
+  /* BALÕES EM FORMATO DE CORAÇÃO */
   .balao {
     position: absolute;
-    background: white;
-    color: #660033;
-    padding: 14px 20px;
-    border-radius: 20px;
+    padding: 22px 26px;
     font-weight: bold;
     font-size: 20px;
-    animation: subir 5s linear forwards;
     opacity: 0.95;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.22);
+    animation: subir 6s linear forwards;
+
+    /* Formato de coração */
+    width: 120px;
+    height: 110px;
+    transform: rotate(-10deg);
+    clip-path: path("M 60 110 C -40 40 20 -20 60 20 C 100 -20 160 40 60 110 Z");
+
+    /* Gradiente animado lindo */
+    background: linear-gradient(135deg, #ff9ad9, #ffc0cb, #ffe6f2);
+    background-size: 300% 300%;
+    animation: subir 6s linear forwards, gradBalao 5s ease infinite;
+
+    /* Efeito neon */
+    box-shadow:
+      0 0 14px #ff7edc,
+      0 0 25px #ffb6ff,
+      0 0 40px #ff8bd1;
+
+    /* Sombra 3D */
+    filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.25));
+  }
+
+  @keyframes gradBalao {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   @keyframes subir {
-    0% { transform: translateY(0) scale(0.8) rotate(-4deg); opacity: 0; }
+    0% { transform: translateY(0) scale(0.7) rotate(-10deg); opacity: 0; }
     10% { opacity: 1; }
-    100% { transform: translateY(-650px) scale(1.1) rotate(6deg); opacity: 0; }
+    100% { transform: translateY(-650px) scale(1) rotate(10deg); opacity: 0; }
   }
 
-  /* Corações no cursor */
+  /* CORAÇÕES NO CURSOR */
   .cursor-heart {
     position: fixed;
     pointer-events: none;
@@ -106,9 +129,15 @@
 
 <button id="btnMensagem">Nova mensagem 💌</button>
 
-<script>
-/* ------------------- LISTA DE MENSAGENS ----------------------- */
+<audio id="musicaFundo" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+  Seu navegador não suporta áudio.
+</audio>
 
+<button id="btnMusica">▶️ Tocar / ⏸️ Pausar Música</button>
+
+<script>
+/* ------------------- MENSAGENS ----------------------- */
 const mensagens = [
   "EU TE AMOOOO! ❤️",
   "Você é o meu mundo 🌎",
@@ -119,50 +148,34 @@ const mensagens = [
   "Nada é mais lindo que o seu olhar ✨"
 ];
 
-/* --------- POSIÇÕES ORGANIZADAS PARA OS BALÕES SUBIREM -------- */
-
+/* ------------- POSIÇÕES ORGANIZADAS DOS BALÕES -------------- */
 let posicoes = [];
 let indicePosicao = 0;
 
-// Gerar colunas fixas e organizadas
 function gerarPosicoes() {
   const largura = window.innerWidth;
-  const total = Math.floor(largura / 180); // distância fixa entre balões
+  const total = Math.floor(largura / 160);
   posicoes = [];
-
-  for (let i = 0; i < total; i++) {
-    const x = 40 + i * 180;
-    posicoes.push(x);
-  }
-
-  // Resetar index quando reorganizar
+  for (let i = 0; i < total; i++) posicoes.push(40 + i * 160);
   indicePosicao = 0;
 }
 
 gerarPosicoes();
-
-// Recalcula colunas ao redimensionar janela
 window.addEventListener("resize", gerarPosicoes);
 
-
-/* ------------------- BALÃO COM DIGITAÇÃO ----------------------- */
-
+/* ---------------- BALÃO + DIGITAÇÃO + EFEITOS ---------------- */
 function criarBalaoDigitando(texto) {
   const balao = document.createElement("div");
   balao.className = "balao";
 
-  // Posição organizada
   balao.style.left = posicoes[indicePosicao] + "px";
   balao.style.bottom = "20px";
 
-  // Próxima coluna em ordem (cíclica)
   indicePosicao = (indicePosicao + 1) % posicoes.length;
 
   document.body.appendChild(balao);
 
   let i = 0;
-
-  // Efeito de digitação
   function digitar() {
     if (i < texto.length) {
       balao.textContent += texto[i];
@@ -170,36 +183,65 @@ function criarBalaoDigitando(texto) {
       setTimeout(digitar, 40);
     }
   }
-
   digitar();
 
-  setTimeout(() => balao.remove(), 5000);
+  ativarEfeitoCrescer(balao);
+
+  setTimeout(() => balao.remove(), 6000);
 }
 
+/* ------------------- BALÃO MAIOR AO DAR DOIS CLIQUES ------------------- */
+function ativarEfeitoCrescer(balao) {
+  balao.addEventListener("dblclick", () => {
+    balao.style.transition = "transform 0.4s ease, filter 0.4s ease";
 
-/* ------------------- CORAÇÕES NO CURSOR ----------------------- */
+    // cresce
+    balao.style.transform += " scale(1.6)";
+    balao.style.filter = "drop-shadow(0 0 15px #fff)";
 
+    // volta ao normal depois
+    setTimeout(() => {
+      balao.style.transform = balao.style.transform.replace(" scale(1.6)", "");
+      balao.style.filter = "drop-shadow(0px 6px 8px rgba(0,0,0,0.25))";
+    }, 600);
+  });
+}
+
+/* ------------------- CORAÇÕES SEGUINDO O MOUSE ----------------------- */
 document.addEventListener("mousemove", (e) => {
   const heart = document.createElement("div");
   heart.className = "cursor-heart";
   heart.textContent = "💖";
-
   heart.style.left = e.pageX + "px";
   heart.style.top = e.pageY + "px";
-
   document.body.appendChild(heart);
-
   setTimeout(() => heart.remove(), 2500);
 });
 
-
-/* ------------------- BOTÃO DE NOVA MENSAGEM ----------------------- */
-
+/* ------------------- BOTÃO MENSAGEM ----------------------- */
 document.getElementById("btnMensagem").addEventListener("click", () => {
   const frase = mensagens[Math.floor(Math.random() * mensagens.length)];
   criarBalaoDigitando(frase);
+});
+
+/* ------------------- MÚSICA DE FUNDO ----------------------- */
+const musica = document.getElementById("musicaFundo");
+const btnMusica = document.getElementById("btnMusica");
+
+// volume baixo suave
+musica.volume = 0.2;
+
+btnMusica.addEventListener("click", () => {
+  if (musica.paused) {
+    musica.play();
+    btnMusica.textContent = "⏸️ Pausar Música";
+  } else {
+    musica.pause();
+    btnMusica.textContent = "▶️ Tocar Música";
+  }
 });
 </script>
 
 </body>
 </html>
+`
