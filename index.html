@@ -105,20 +105,15 @@
     100% { background-position: 0% 50%; }
   }
 
-  @keyframes subir {
-    0% { transform: translateY(0) scale(0.7) rotate(-10deg); opacity: 0; }
-    10% { opacity: 1; }
-    100% { transform: translateY(-650px) scale(1) rotate(10deg); opacity: 0; }
-  }
+@keyframes subir {
+  0% { transform: translateY(0) scale(0.7) rotate(-10deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(-950px) scale(1) rotate(10deg); opacity: 0; }
+}
 
-  /* CORAÇÕES NO CURSOR */
-  .cursor-heart {
-    position: fixed;
-    pointer-events: none;
-    font-size: 22px;
-    opacity: 0.9;
-    animation: subir 2.5s linear forwards;
-  }
+
+ 
+  
 </style>
 </head>
 
@@ -206,17 +201,6 @@ function ativarEfeitoCrescer(balao) {
     }, 600);
   });
 }
-
-/* ------------------- CORAÇÕES SEGUINDO O MOUSE ----------------------- */
-document.addEventListener("mousemove", (e) => {
-  const heart = document.createElement("div");
-  heart.className = "cursor-heart";
-  heart.textContent = "💖";
-  heart.style.left = e.pageX + "px";
-  heart.style.top = e.pageY + "px";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 2500);
-});
 
 /* ------------------- BOTÃO MENSAGEM ----------------------- */
 document.getElementById("btnMensagem").addEventListener("click", () => {
