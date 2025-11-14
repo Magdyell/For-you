@@ -69,16 +69,6 @@
   }
   #btnMusica:hover { transform: scale(1.08); }
 
-  /* BALÕES EM FORMATO DE CORAÇÃO */
-  .balao {
-    position: absolute;
-    padding: 22px 26px;
-    font-weight: bold;
-    font-size: 20px;
-    opacity: 0.95;
-    animation: subir 6s linear forwards;
-
-
 
     /* Gradiente animado lindo */
     background: linear-gradient(135deg, #ff9ad9, #ffc0cb, #ffe6f2);
@@ -162,8 +152,11 @@ function criarBalaoDigitando(texto) {
   balao.style.left = posicoes[indicePosicao] + "px";
   balao.style.bottom = "20px";
 
-  indicePosicao = (indicePosicao + 1) % posicoes.length;
+  // Duração aleatória entre 8s e 15s
+  const duracao = 8 + Math.random() * 7;
+  balao.style.animationDuration = duracao + "s";
 
+  indicePosicao = (indicePosicao + 1) % posicoes.length;
   document.body.appendChild(balao);
 
   let i = 0;
@@ -178,8 +171,9 @@ function criarBalaoDigitando(texto) {
 
   ativarEfeitoCrescer(balao);
 
-  setTimeout(() => balao.remove(), 6000);
+  setTimeout(() => balao.remove(), duracao * 1000); // remove após a animação
 }
+
 
 /* ------------------- BALÃO MAIOR AO DAR DOIS CLIQUES ------------------- */
 function ativarEfeitoCrescer(balao) {
