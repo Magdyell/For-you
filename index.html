@@ -39,7 +39,7 @@
     transform: rotateX(10deg);
   }
 
-  /* Botão principal */
+  /* Botão estilizado */
   button {
     margin: 20px;
     padding: 14px 34px;
@@ -55,7 +55,6 @@
 
   button:hover {
     transform: scale(1.1) rotateZ(-1deg);
-    animation: tremer 0.2s infinite;
   }
 
   @keyframes pulsar {
@@ -64,20 +63,12 @@
     100% { transform: scale(1); }
   }
 
-  @keyframes tremer {
-    0% { transform: translate(0); }
-    25% { transform: translate(-2px, 1px); }
-    50% { transform: translate(2px, -1px); }
-    75% { transform: translate(-1px, -2px); }
-    100% { transform: translate(1px, 2px); }
-  }
-
   @keyframes brilho {
     0% { box-shadow: 0 0 10px #ff74c8; }
-    100% { box-shadow: 0 0 25px #ffffff; }
+    100% { box-shadow: 0 0 28px #ffffff; }
   }
 
-  /* Balões animados */
+  /* Balões ORGANIZADOS */
   .balao {
     position: absolute;
     background: white;
@@ -87,8 +78,8 @@
     font-weight: bold;
     font-size: 20px;
     animation: subir 5s linear forwards;
-    opacity: 0.9;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+    opacity: 0.95;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.22);
   }
 
   @keyframes subir {
@@ -97,13 +88,14 @@
     100% { transform: translateY(-650px) scale(1.1) rotate(6deg); opacity: 0; }
   }
 
-  /* Corações no modo surpresa */
-  .coracao {
-    position: absolute;
-    font-size: 30px;
-    animation: subir 4s linear forwards;
+  /* Corações no cursor */
+  .cursor-heart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 22px;
+    opacity: 0.9;
+    animation: subir 2.5s linear forwards;
   }
-
 </style>
 </head>
 
@@ -113,9 +105,10 @@
 <p>Eu amo você de todas as formas possíveis 💖</p>
 
 <button id="btnMensagem">Nova mensagem 💌</button>
-<button id="btnSurpresa" style="background:#62dfff;">🎉 MODO SURPRESA 🎉</button>
 
 <script>
+/* ------------------- LISTA DE MENSAGENS ----------------------- */
+
 const mensagens = [
   "EU TE AMOOOO! ❤️",
   "Você é o meu mundo 🌎",
@@ -126,44 +119,85 @@ const mensagens = [
   "Nada é mais lindo que o seu olhar ✨"
 ];
 
-function criarBalao(texto) {
+/* --------- POSIÇÕES ORGANIZADAS PARA OS BALÕES SUBIREM -------- */
+
+let posicoes = [];
+let indicePosicao = 0;
+
+// Gerar colunas fixas e organizadas
+function gerarPosicoes() {
+  const largura = window.innerWidth;
+  const total = Math.floor(largura / 180); // distância fixa entre balões
+  posicoes = [];
+
+  for (let i = 0; i < total; i++) {
+    const x = 40 + i * 180;
+    posicoes.push(x);
+  }
+
+  // Resetar index quando reorganizar
+  indicePosicao = 0;
+}
+
+gerarPosicoes();
+
+// Recalcula colunas ao redimensionar janela
+window.addEventListener("resize", gerarPosicoes);
+
+
+/* ------------------- BALÃO COM DIGITAÇÃO ----------------------- */
+
+function criarBalaoDigitando(texto) {
   const balao = document.createElement("div");
   balao.className = "balao";
-  balao.textContent = texto;
 
-  balao.style.left = Math.random() * (window.innerWidth - 200) + "px";
+  // Posição organizada
+  balao.style.left = posicoes[indicePosicao] + "px";
   balao.style.bottom = "20px";
 
+  // Próxima coluna em ordem (cíclica)
+  indicePosicao = (indicePosicao + 1) % posicoes.length;
+
   document.body.appendChild(balao);
+
+  let i = 0;
+
+  // Efeito de digitação
+  function digitar() {
+    if (i < texto.length) {
+      balao.textContent += texto[i];
+      i++;
+      setTimeout(digitar, 40);
+    }
+  }
+
+  digitar();
+
   setTimeout(() => balao.remove(), 5000);
 }
 
-function criarCoracao() {
-  const c = document.createElement("div");
-  c.className = "coracao";
-  c.textContent = "💖";
 
-  c.style.left = Math.random() * window.innerWidth + "px";
-  c.style.bottom = "0px";
+/* ------------------- CORAÇÕES NO CURSOR ----------------------- */
 
-  document.body.appendChild(c);
-  setTimeout(() => c.remove(), 4000);
-}
+document.addEventListener("mousemove", (e) => {
+  const heart = document.createElement("div");
+  heart.className = "cursor-heart";
+  heart.textContent = "💖";
+
+  heart.style.left = e.pageX + "px";
+  heart.style.top = e.pageY + "px";
+
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 2500);
+});
+
+
+/* ------------------- BOTÃO DE NOVA MENSAGEM ----------------------- */
 
 document.getElementById("btnMensagem").addEventListener("click", () => {
   const frase = mensagens[Math.floor(Math.random() * mensagens.length)];
-  criarBalao(frase);
-  criarCoracao();
-});
-
-document.getElementById("btnSurpresa").addEventListener("click", () => {
-  mensagens.forEach((msg, i) => {
-    setTimeout(() => criarBalao(msg), i * 400);
-  });
-
-  for (let i = 0; i < 25; i++) {
-    setTimeout(() => criarCoracao(), i * 120);
-  }
+  criarBalaoDigitando(frase);
 });
 </script>
 
