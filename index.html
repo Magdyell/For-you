@@ -67,19 +67,19 @@
   }
   #btnMusica:hover { transform: scale(1.08); }
 
-  /* BALÕES SIMPLES */
+  /* BALÕES VISÍVEIS */
   .balao {
     position: absolute;
-    padding: 18px 24px;
+    padding: 14px 24px;
     font-weight: bold;
     font-size: 20px;
     opacity: 0.95;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ff9ad9, #ffc0cb, #ffe6f2);
+    border-radius: 12px;
+    background-color: #ff4081; /* fundo sólido para visibilidade */
+    color: white;
     box-shadow:
-      0 0 12px #ff7edc,
-      0 0 20px #ffb6ff,
-      0 0 30px #ff8bd1;
+      0 0 8px #ff74c8,
+      0 0 16px #ffb6ff;
     filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.25));
     white-space: nowrap;
   }
@@ -90,7 +90,6 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Animação vertical de subida */
   @keyframes subir {
     0%   { transform: translateY(0px) scale(0.7); opacity: 0; }
     10%  { opacity: 1; }
@@ -149,8 +148,8 @@ function criarBalaoDigitando(texto) {
   balao.style.left = leftPos + "px";
   indicePosicao = (indicePosicao + 1) % posicoes.length;
 
-  // altura inicial baixa
-  const alturaInicial = Math.random() * 50;
+  // altura inicial ainda mais baixa (bem perto da base)
+  const alturaInicial = Math.random() * 20; // 0 a 20px do fundo
   balao.style.bottom = alturaInicial + "px";
 
   // duração aleatória
