@@ -30,7 +30,6 @@
   h1 { font-size: 38px; text-shadow: 2px 2px 10px rgba(0,0,0,0.4); }
   p  { font-size: 20px; margin-top: -10px; }
 
-  /* BOTÃO MENSAGEM */
   button {
     margin: 20px;
     padding: 14px 34px;
@@ -54,7 +53,6 @@
     50% { transform: scale(1.05); }
   }
 
-  /* BOTÃO MÚSICA */
   #btnMusica {
     margin-top: 15px;
     padding: 10px 22px;
@@ -70,20 +68,6 @@
   #btnMusica:hover { transform: scale(1.08); }
 
 
-    /* Gradiente animado lindo */
-    background: linear-gradient(135deg, #ff9ad9, #ffc0cb, #ffe6f2);
-    background-size: 300% 300%;
-    animation: subir 6s linear forwards, gradBalao 5s ease infinite;
-
-    /* Efeito neon */
-    box-shadow:
-      0 0 14px #ff7edc,
-      0 0 25px #ffb6ff,
-      0 0 40px #ff8bd1;
-
-    /* Sombra 3D */
-    filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.25));
-  }
 
   @keyframes gradBalao {
     0% { background-position: 0% 50%; }
@@ -91,15 +75,13 @@
     100% { background-position: 0% 50%; }
   }
 
-@keyframes subir {
-  0% { transform: translateY(0) scale(0.7) rotate(-10deg); opacity: 0; }
-  10% { opacity: 1; }
-  100% { transform: translateY(-950px) scale(1) rotate(10deg); opacity: 0; }
-}
+  /* Animação de subida com leve flutuação lateral */
+  @keyframes subir {
+    0%   { transform: translate(0px,0px) scale(0.7) rotate(-10deg); opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translate(var(--x), -950px) scale(1) rotate(10deg); opacity: 0; }
+  }
 
-
- 
-  
 </style>
 </head>
 
@@ -149,16 +131,25 @@ function criarBalaoDigitando(texto) {
   const balao = document.createElement("div");
   balao.className = "balao";
 
+  // posição horizontal
   balao.style.left = posicoes[indicePosicao] + "px";
-  balao.style.bottom = "20px";
-
-  // Duração aleatória entre 8s e 15s
-  const duracao = 8 + Math.random() * 7;
-  balao.style.animationDuration = duracao + "s";
-
   indicePosicao = (indicePosicao + 1) % posicoes.length;
+
+  // posição vertical inicial mais baixa e aleatória
+  const alturaInicial = Math.random() * 50; // 0 a 50px do rodapé
+  balao.style.bottom = alturaInicial + "px";
+
+  // velocidade aleatória
+  const duracao = 8 + Math.random() * 7; // 8s a 15s
+  balao.style.animation = `subir ${duracao}s linear forwards, gradBalao 5s ease infinite`;
+
+  // flutuação lateral
+  const deslocamentoX = (Math.random() * 100 - 50) + "px"; // -50px a +50px
+  balao.style.setProperty('--x', deslocamentoX);
+
   document.body.appendChild(balao);
 
+  // digitação da mensagem
   let i = 0;
   function digitar() {
     if (i < texto.length) {
@@ -171,20 +162,17 @@ function criarBalaoDigitando(texto) {
 
   ativarEfeitoCrescer(balao);
 
-  setTimeout(() => balao.remove(), duracao * 1000); // remove após a animação
+  setTimeout(() => balao.remove(), duracao * 1000);
 }
-
 
 /* ------------------- BALÃO MAIOR AO DAR DOIS CLIQUES ------------------- */
 function ativarEfeitoCrescer(balao) {
   balao.addEventListener("dblclick", () => {
     balao.style.transition = "transform 0.4s ease, filter 0.4s ease";
 
-    // cresce
     balao.style.transform += " scale(1.6)";
     balao.style.filter = "drop-shadow(0 0 15px #fff)";
 
-    // volta ao normal depois
     setTimeout(() => {
       balao.style.transform = balao.style.transform.replace(" scale(1.6)", "");
       balao.style.filter = "drop-shadow(0px 6px 8px rgba(0,0,0,0.25))";
@@ -201,8 +189,6 @@ document.getElementById("btnMensagem").addEventListener("click", () => {
 /* ------------------- MÚSICA DE FUNDO ----------------------- */
 const musica = document.getElementById("musicaFundo");
 const btnMusica = document.getElementById("btnMusica");
-
-// volume baixo suave
 musica.volume = 0.2;
 
 btnMusica.addEventListener("click", () => {
@@ -218,4 +204,3 @@ btnMusica.addEventListener("click", () => {
 
 </body>
 </html>
-`
