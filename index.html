@@ -1,132 +1,171 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mensagem de Amor 💖</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amor em Movimento 💖</title>
 
-  <!-- Fonte bonita -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      background-color: #e6f2ff; /* Azul bebê inicial */
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      padding: 50px;
-      margin: 0;
-      transition: background-color 1s ease;
-    }
+<style>
+  body {
+    margin: 0;
+    padding: 40px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    color: white;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #ff8bd1, #9354ff, #66c6ff, #ffa8a8);
+    background-size: 400% 400%;
+    animation: gradiente 12s ease infinite;
+    perspective: 900px;
+  }
 
-    h1 {
-      color: #b30000;
-      font-size: 36px;
-      text-shadow: 2px 2px 5px #999;
-      margin-bottom: 10px;
-    }
+  @keyframes gradiente {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-    p {
-      color: #004080;
-      font-size: 20px;
-      margin-bottom: 30px;
-    }
+  h1 {
+    font-size: 38px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+    transform: rotateX(10deg);
+  }
 
-    button {
-      background-color: #007bff;
-      color: white;
-      font-size: 18px;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
+  p {
+    font-size: 20px;
+    margin-top: -10px;
+    transform: rotateX(10deg);
+  }
 
-    button:hover {
-      background-color: #ff7fd9;
-      transform: scale(1.05);
-    }
+  /* Botão principal */
+  button {
+    margin: 20px;
+    padding: 14px 34px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    background: #ff4da6;
+    color: white;
+    cursor: pointer;
+    transition: .2s;
+    animation: pulsar 1.7s infinite ease-in-out, brilho 2s infinite alternate;
+  }
 
-    button:active {
-      background-color: #003d80;
-      transform: scale(0.98);
-    }
+  button:hover {
+    transform: scale(1.1) rotateZ(-1deg);
+    animation: tremer 0.2s infinite;
+  }
 
-    #mensagem {
-      margin-top: 40px;
-      font-size: 28px;
-      font-weight: bold;
-      min-height: 50px;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
+  @keyframes pulsar {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
 
-    #mensagem.mostrar {
-      opacity: 1;
-    }
+  @keyframes tremer {
+    0% { transform: translate(0); }
+    25% { transform: translate(-2px, 1px); }
+    50% { transform: translate(2px, -1px); }
+    75% { transform: translate(-1px, -2px); }
+    100% { transform: translate(1px, 2px); }
+  }
 
-    @media (max-width: 480px) {
-      h1 { font-size: 24px; }
-      #mensagem { font-size: 20px; }
-      body { padding: 25px; }
-    }
-  </style>
+  @keyframes brilho {
+    0% { box-shadow: 0 0 10px #ff74c8; }
+    100% { box-shadow: 0 0 25px #ffffff; }
+  }
+
+  /* Balões animados */
+  .balao {
+    position: absolute;
+    background: white;
+    color: #660033;
+    padding: 14px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    animation: subir 5s linear forwards;
+    opacity: 0.9;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+  }
+
+  @keyframes subir {
+    0% { transform: translateY(0) scale(0.8) rotate(-4deg); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(-650px) scale(1.1) rotate(6deg); opacity: 0; }
+  }
+
+  /* Corações no modo surpresa */
+  .coracao {
+    position: absolute;
+    font-size: 30px;
+    animation: subir 4s linear forwards;
+  }
+
+</style>
 </head>
 
 <body>
-  <h1>Para a mais bela de todas as mulheres!</h1>
-  <p>Eu amo você de todas as formas possíveis 💖</p>
 
-  <button id="meuBotao">Clique aqui</button>
+<h1>Para a mais bela de todas as mulheres! 💕</h1>
+<p>Eu amo você de todas as formas possíveis 💖</p>
 
-  <div id="mensagem" aria-live="polite"></div>
+<button id="btnMensagem">Nova mensagem 💌</button>
+<button id="btnSurpresa" style="background:#62dfff;">🎉 MODO SURPRESA 🎉</button>
 
-  <script>
-    const mensagens = [
-      "EU TE AMOOOO! ❤️",
-      "Você é o meu mundo 🌎",
-      "Seu sorriso ilumina meu dia ☀️",
-      "Cada batida do meu coração é por você 💓",
-      "Te amo mais do que ontem, menos do que amanhã 💞",
-      "Você é meu destino e minha paz 🌹",
-      "Nada é mais lindo que o seu olhar ✨"
-    ];
+<script>
+const mensagens = [
+  "EU TE AMOOOO! ❤️",
+  "Você é o meu mundo 🌎",
+  "Seu sorriso ilumina meu dia ☀️",
+  "Cada batida do meu coração é por você 💓",
+  "Te amo mais do que ontem, menos do que amanhã 💞",
+  "Você é meu destino e minha paz 🌹",
+  "Nada é mais lindo que o seu olhar ✨"
+];
 
-    const estilos = [
-      { fundo: "#c8a2c8", texto: "#2b0032" }, // lilás
-      { fundo: "#ff4d4d", texto: "#fff" },    // vermelho
-      { fundo: "#800080", texto: "#ffccff" }, // roxo
-      { fundo: "#ff99cc", texto: "#660033" }, // rosa
-      { fundo: "#add8e6", texto: "#003366" }  // azul bebê
-    ];
+function criarBalao(texto) {
+  const balao = document.createElement("div");
+  balao.className = "balao";
+  balao.textContent = texto;
 
-    let iMsg = 0;
-    let iCor = 0;
+  balao.style.left = Math.random() * (window.innerWidth - 200) + "px";
+  balao.style.bottom = "20px";
 
-    const botao = document.getElementById("meuBotao");
-    const div = document.getElementById("mensagem");
-    const corpo = document.body;
+  document.body.appendChild(balao);
+  setTimeout(() => balao.remove(), 5000);
+}
 
-    function mostrarMensagem() {
-      // Atualiza o fundo e a cor do texto
-      corpo.style.backgroundColor = estilos[iCor].fundo;
-      div.style.color = estilos[iCor].texto;
+function criarCoracao() {
+  const c = document.createElement("div");
+  c.className = "coracao";
+  c.textContent = "💖";
 
-      // Atualiza a mensagem
-      div.textContent = mensagens[iMsg];
-      div.classList.add("mostrar");
+  c.style.left = Math.random() * window.innerWidth + "px";
+  c.style.bottom = "0px";
 
-      // Mantém a mensagem visível por 2 segundos antes de sumir
-      setTimeout(() => {
-        div.classList.remove("mostrar");
-      }, 3000);
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 4000);
+}
 
-      // Próximos índices
-      iMsg = (iMsg + 1) % mensagens.length;
-      iCor = (iCor + 1) % estilos.length;
-    }
+document.getElementById("btnMensagem").addEventListener("click", () => {
+  const frase = mensagens[Math.floor(Math.random() * mensagens.length)];
+  criarBalao(frase);
+  criarCoracao();
+});
 
-    botao.addEventListener("click", mostrarMensagem);
-  </script>
+document.getElementById("btnSurpresa").addEventListener("click", () => {
+  mensagens.forEach((msg, i) => {
+    setTimeout(() => criarBalao(msg), i * 400);
+  });
+
+  for (let i = 0; i < 25; i++) {
+    setTimeout(() => criarCoracao(), i * 120);
+  }
+});
+</script>
+
 </body>
 </html>
