@@ -67,7 +67,22 @@
   }
   #btnMusica:hover { transform: scale(1.08); }
 
-
+  /* BALÕES SIMPLES */
+  .balao {
+    position: absolute;
+    padding: 18px 24px;
+    font-weight: bold;
+    font-size: 20px;
+    opacity: 0.95;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9ad9, #ffc0cb, #ffe6f2);
+    box-shadow:
+      0 0 12px #ff7edc,
+      0 0 20px #ffb6ff,
+      0 0 30px #ff8bd1;
+    filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.25));
+    white-space: nowrap;
+  }
 
   @keyframes gradBalao {
     0% { background-position: 0% 50%; }
@@ -75,11 +90,11 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Animação de subida com leve flutuação lateral */
+  /* Animação vertical de subida */
   @keyframes subir {
-    0%   { transform: translate(0px,0px) scale(0.7) rotate(-10deg); opacity: 0; }
+    0%   { transform: translateY(0px) scale(0.7); opacity: 0; }
     10%  { opacity: 1; }
-    100% { transform: translate(var(--x), -950px) scale(1) rotate(10deg); opacity: 0; }
+    100% { transform: translateY(-950px) scale(1); opacity: 0; }
   }
 
 </style>
@@ -111,7 +126,7 @@ const mensagens = [
   "Nada é mais lindo que o seu olhar ✨"
 ];
 
-/* ------------- POSIÇÕES ORGANIZADAS DOS BALÕES -------------- */
+/* ---------------- POSIÇÕES DOS BALÕES ----------------- */
 let posicoes = [];
 let indicePosicao = 0;
 
@@ -122,34 +137,29 @@ function gerarPosicoes() {
   for (let i = 0; i < total; i++) posicoes.push(40 + i * 160);
   indicePosicao = 0;
 }
-
 gerarPosicoes();
 window.addEventListener("resize", gerarPosicoes);
 
-/* ---------------- BALÃO + DIGITAÇÃO + EFEITOS ---------------- */
+/* ---------------- CRIAR BALÃO ---------------- */
 function criarBalaoDigitando(texto) {
   const balao = document.createElement("div");
   balao.className = "balao";
 
-  // posição horizontal
-  balao.style.left = posicoes[indicePosicao] + "px";
+  let leftPos = posicoes[indicePosicao];
+  balao.style.left = leftPos + "px";
   indicePosicao = (indicePosicao + 1) % posicoes.length;
 
-  // posição vertical inicial mais baixa e aleatória
-  const alturaInicial = Math.random() * 50; // 0 a 50px do rodapé
+  // altura inicial baixa
+  const alturaInicial = Math.random() * 50;
   balao.style.bottom = alturaInicial + "px";
 
-  // velocidade aleatória
-  const duracao = 8 + Math.random() * 7; // 8s a 15s
+  // duração aleatória
+  const duracao = 8 + Math.random() * 7;
   balao.style.animation = `subir ${duracao}s linear forwards, gradBalao 5s ease infinite`;
-
-  // flutuação lateral
-  const deslocamentoX = (Math.random() * 100 - 50) + "px"; // -50px a +50px
-  balao.style.setProperty('--x', deslocamentoX);
 
   document.body.appendChild(balao);
 
-  // digitação da mensagem
+  // digitação
   let i = 0;
   function digitar() {
     if (i < texto.length) {
@@ -160,24 +170,30 @@ function criarBalaoDigitando(texto) {
   }
   digitar();
 
-  ativarEfeitoCrescer(balao);
-
-  setTimeout(() => balao.remove(), duracao * 1000);
-}
-
-/* ------------------- BALÃO MAIOR AO DAR DOIS CLIQUES ------------------- */
-function ativarEfeitoCrescer(balao) {
+  // efeito de duplo clique
   balao.addEventListener("dblclick", () => {
     balao.style.transition = "transform 0.4s ease, filter 0.4s ease";
-
     balao.style.transform += " scale(1.6)";
     balao.style.filter = "drop-shadow(0 0 15px #fff)";
-
     setTimeout(() => {
       balao.style.transform = balao.style.transform.replace(" scale(1.6)", "");
       balao.style.filter = "drop-shadow(0px 6px 8px rgba(0,0,0,0.25))";
     }, 600);
   });
+
+  // flutuação lateral
+  let deslocamento = 0;
+  const direcao = Math.random() > 0.5 ? 1 : -1;
+  const flutuar = setInterval(() => {
+    deslocamento += direcao * 0.5;
+    balao.style.transform = `translateX(${deslocamento}px)`;
+  }, 30);
+
+  // remover após a animação
+  setTimeout(() => {
+    clearInterval(flutuar);
+    balao.remove();
+  }, duracao * 1000);
 }
 
 /* ------------------- BOTÃO MENSAGEM ----------------------- */
