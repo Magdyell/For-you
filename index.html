@@ -1,221 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amor em Movimento 💖</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Você com Amor 💖</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-<style>
-  body {
-    margin: 0;
-    padding: 40px;
-    text-align: center;
-    font-family: "Poppins", sans-serif;
-    color: white;
-    overflow-x: hidden;
-    background: linear-gradient(-45deg, #ff8bd1, #9354ff, #66c6ff, #ffa8a8);
-    background-size: 400% 400%;
-    animation: gradiente 12s ease infinite;
-    perspective: 900px;
-  }
-
-  @keyframes gradiente {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  h1 { font-size: 38px; text-shadow: 2px 2px 10px rgba(0,0,0,0.4); }
-  p  { font-size: 20px; margin-top: -10px; }
-
-  button {
-    margin: 20px;
-    padding: 14px 34px;
-    font-size: 20px;
-    border: none;
-    border-radius: 12px;
-    background: #ff4da6;
-    color: white;
-    cursor: pointer;
-    transition: .2s;
-    animation: pulsar 1.7s infinite ease-in-out, brilhoBotao 2s infinite alternate;
-  }
-
-  @keyframes brilhoBotao {
-    0% { box-shadow: 0 0 10px #ff74c8; }
-    100% { box-shadow: 0 0 28px #ffffff; }
-  }
-
-  @keyframes pulsar {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-
-  #btnMusica {
-    margin-top: 15px;
-    padding: 10px 22px;
-    font-size: 16px;
-    border: none;
-    border-radius: 12px;
-    background: #ff7edb;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-    animation: pulsar 1.7s infinite ease-in-out, brilhoBotao 2s infinite alternate;
-  }
-  #btnMusica:hover { transform: scale(1.08); }
-
-  /* BALÕES VISÍVEIS */
-  .balao {
-    position: absolute;
-    padding: 14px 24px;
-    font-weight: bold;
-    font-size: 20px;
-    opacity: 0.95;
-    border-radius: 12px;
-    background-color: #ff4081; /* fundo sólido para visibilidade */
-    color: white;
-    box-shadow:
-      0 0 8px #ff74c8,
-      0 0 16px #ffb6ff;
-    filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.25));
-    white-space: nowrap;
-  }
-
-  @keyframes gradBalao {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  @keyframes subir {
-    0%   { transform: translateY(0px) scale(0.7); opacity: 0; }
-    10%  { opacity: 1; }
-    100% { transform: translateY(-950px) scale(1); opacity: 0; }
-  }
-
-</style>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Montserrat:wght@700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="particles" id="particles"></div>
+  <div class="gallery-container" id="galleryContainer"></div>
 
-<h1>Para a mais bela de todas as mulheres! 💕</h1>
-<p>Eu amo você de todas as formas possíveis 💖</p>
 
-<button id="btnMensagem">Nova mensagem 💌</button>
+  <div class="photo-counter" id="photoCounter"></div>
 
-<audio id="musicaFundo" loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
-  Seu navegador não suporta áudio.
-</audio>
 
-<button id="btnMusica">▶️ Tocar / ⏸️ Pausar Música</button>
+  <div class="floating-controls">
+    <button class="control-btn" id="btnPrevPhoto" title="Foto anterior">❮</button>
+    <button class="control-btn" id="btnPlayPause" title="Play/Pausa galeria">⏸️</button>
+    <button class="control-btn" id="btnNextPhoto" title="Próxima foto">❯</button>
+  </div>
 
-<script>
-/* ------------------- MENSAGENS ----------------------- */
-const mensagens = [
-  "EU TE AMOOOO! ❤️",
-  "Você é o meu mundo 🌎",
-  "Seu sorriso ilumina meu dia ☀️",
-  "Cada batida do meu coração é por você 💓",
-  "Te amo mais do que ontem, menos do que amanhã 💞",
-  "Você é meu destino e minha paz 🌹",
-  "Nada é mais lindo que o seu olhar ✨"
-];
 
-/* ---------------- POSIÇÕES DOS BALÕES ----------------- */
-let posicoes = [];
-let indicePosicao = 0;
+  <div class="content-bottom">
+    <h1>Para a mais bela de todas as mulheres! 💕</h1>
+    <p>Eu amo você de todas as formas possíveis 💖</p>
 
-function gerarPosicoes() {
-  const largura = window.innerWidth;
-  const total = Math.floor(largura / 160);
-  posicoes = [];
-  for (let i = 0; i < total; i++) posicoes.push(40 + i * 160);
-  indicePosicao = 0;
-}
-gerarPosicoes();
-window.addEventListener("resize", gerarPosicoes);
+    <div class="button-group">
+      <button id="btnMensagem">💌 Nova Mensagem</button>
+      <button id="btnMusica">🎵 Reproduzir</button>
+    </div>
+  </div>
 
-/* ---------------- CRIAR BALÃO ---------------- */
-function criarBalaoDigitando(texto) {
-  const balao = document.createElement("div");
-  balao.className = "balao";
 
-  let leftPos = posicoes[indicePosicao];
-  balao.style.left = leftPos + "px";
-  indicePosicao = (indicePosicao + 1) % posicoes.length;
+  <audio id="musicaFundo" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
 
-  // altura inicial ainda mais baixa (bem perto da base)
-  const alturaInicial = Math.random() * 20; // 0 a 20px do fundo
-  balao.style.bottom = alturaInicial + "px";
-
-  // duração aleatória
-  const duracao = 8 + Math.random() * 7;
-  balao.style.animation = `subir ${duracao}s linear forwards, gradBalao 5s ease infinite`;
-
-  document.body.appendChild(balao);
-
-  // digitação
-  let i = 0;
-  function digitar() {
-    if (i < texto.length) {
-      balao.textContent += texto[i];
-      i++;
-      setTimeout(digitar, 40);
-    }
-  }
-  digitar();
-
-  // efeito de duplo clique
-  balao.addEventListener("dblclick", () => {
-    balao.style.transition = "transform 0.4s ease, filter 0.4s ease";
-    balao.style.transform += " scale(1.6)";
-    balao.style.filter = "drop-shadow(0 0 15px #fff)";
-    setTimeout(() => {
-      balao.style.transform = balao.style.transform.replace(" scale(1.6)", "");
-      balao.style.filter = "drop-shadow(0px 6px 8px rgba(0,0,0,0.25))";
-    }, 600);
-  });
-
-  // flutuação lateral
-  let deslocamento = 0;
-  const direcao = Math.random() > 0.5 ? 1 : -1;
-  const flutuar = setInterval(() => {
-    deslocamento += direcao * 0.5;
-    balao.style.transform = `translateX(${deslocamento}px)`;
-  }, 30);
-
-  // remover após a animação
-  setTimeout(() => {
-    clearInterval(flutuar);
-    balao.remove();
-  }, duracao * 1000);
-}
-
-/* ------------------- BOTÃO MENSAGEM ----------------------- */
-document.getElementById("btnMensagem").addEventListener("click", () => {
-  const frase = mensagens[Math.floor(Math.random() * mensagens.length)];
-  criarBalaoDigitando(frase);
-});
-
-/* ------------------- MÚSICA DE FUNDO ----------------------- */
-const musica = document.getElementById("musicaFundo");
-const btnMusica = document.getElementById("btnMusica");
-musica.volume = 0.2;
-
-btnMusica.addEventListener("click", () => {
-  if (musica.paused) {
-    musica.play();
-    btnMusica.textContent = "⏸️ Pausar Música";
-  } else {
-    musica.pause();
-    btnMusica.textContent = "▶️ Tocar Música";
-  }
-});
-</script>
-
+  <script src="script.js"></script>
 </body>
+
 </html>
